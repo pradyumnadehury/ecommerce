@@ -1,0 +1,40 @@
+{% extends 'base.html'%}
+{% block title %}Order #{{order.id}}{% endblock %}
+{% block content %}
+<h1>Order #{{order.id}}</h1>
+<div>
+    <p><strong>Status:</strong><span class="badge {{order.status}}">{{order.get_status_display}}</span></p>
+    <p><strong>Shipped addreess:</strong>{{order.shipping_address}}</p>
+    <p><strong>Placed:</strong>{{order.created_at|date:"M d,Y H:i"}}</p>
+    {% if user.is_staff %} <p><strong>Customer:</strong>{{ order.customer.username }}</p>{% endif %}
+
+</div>
+<div class="card">
+    <h2>Items</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Subtotal</th>
+            </tr>
+            
+        </thead>
+        <tbody>
+            {% for item in order.items.all %}
+              <tr>
+                 <td>{{item.product.name}}</td>
+                 <td>{{item.quantity}}</td>
+                 <td>${{item.price}}</td>
+                 <td>${{item.subtotal}}</td>
+
+              </tr>
+            {% endfor %}  
+        </tbody>
+    </table>
+    <p class="cart-total">Total: ${{order.total}}</p>
+</div>
+<a href="{% url 'order_list' %}" class="btn secondary">Back to orders</a>
+{% endblock %}
+

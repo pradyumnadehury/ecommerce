@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}My orders{% endblock %}
+{% block content %}
+<h1>{% if user.is_staff %}All orders {% else %}My orders{% endif %}</h1>
+{% if orders %}
+<table>
+    <thead>
+        <tr>
+            <th>Order #</th>
+            {% if user.is_staff %} <th>Customer</th> {% endif %}
+            <th>Status</th>
+            <th>Total</th>
+            <th>Placed</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>#{{order.id}}</td>
+            {% if user.is_staff %} <td>{{order.customer.username}}</td>{% endif %}
+            <td><span class="badge {{order.status}}">{{order.get_status_display}}</span></td>
+            <td>${{order.total}}</td>
+            <td>{{order.created_at|date:"M d,Y"}}</td>
+            <td><a href="{% url 'order_detail' order.pk%}" class="btn secondary">View</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% if is_paginated %}
+<p>
+    {% if page_obj.has_previous %} <a href="?page={{page_obj.previous_page_number }}">&laquo;previous</a>{% endif %}
+     Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+    {% if page_obj.has_next %} <a href="?page={{page_obj.next_page_number}}">Next &raquo;</a>{% endif %}
+
+</p>
+{% endif %}
+{% else %}
+<div>
+    <p>you haven't placed any orders yet.</p>
+    <a href="{% url 'product_list' %}" class="btn">Start shoppings</a>
+</div>
+{% endif %}
+{% endblock %}
+

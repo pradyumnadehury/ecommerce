@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %} shop {% endblock %}
+{% block content %}
+<h1>shop</h1>
+
+<div class="filters">
+    <a href="{% url 'product_list' %}" class="{% if not selected_category %}active{% endif %}"></a>
+    {% for cat in categories %}
+       <a href="?category={{cat.slug}}" class="{% if selected_category == cat.slug %}active{%endif%}"></a>
+    {% endfor %}
+    <form action="" method="get" class="search-form" style="margin-left: auto;">
+        <input type="text" name="q" placeholder="Search products..." value="{{query}}">
+    </form>   
+</div>
+{% if products %}
+<div class="product-grid">
+    {% for product in products %}
+    <div class="product-card">
+        <a href="{% url 'product_detail' product.slug %}">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{product.name}}">
+            {% else %}
+                <div class="product-thumb placeholder">No image</div> 
+            {% endif %}       
+        </a>
+        <div>
+            <h3><a href="{% url 'product_detail' product.slug%}">{{product.name}}</a></h3>
+            <span class="price">${{product.price}}</span>
+            {% if not product.in_stock%} <span class="out-of-stock">Out of stock</span>{% endif %}
+        </div>
+        
+    </div>
+    {% endfor %}
+</div>
+{% if is_paginated %}
+<p style="margin-top: 1.5rem;"> 
+    {% if page_obj.has_previous %}<a href="?page={{page_obj.previous_page_number}}">&laquo;previous page</a>{%endif%}
+     page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+    {% if page_obj.has_next %} <a href="?page={{page_obj.next_page_number}}">Next &raquo;</a>{% endif %} 
+
+</p>
+
+{%endif%}
+{% else %}
+    <div class="empty-state"><p>No products</p></div>
+{%endif%}
+{% endblock %}

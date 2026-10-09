@@ -1,0 +1,33 @@
+{% extends "base.html"%}
+
+{% block title %}Login {% endblock %}
+{% block content %}
+<div class="auth-box card">
+    <h1>Login</h1>
+    <form action="" method="post">
+        {%csrf_token%}
+        {{form.non_fields_error}}
+        <!--Note {{ form.non_field_errors }} at the top of the form
+         and the template lookup for errors on each field.-->
+        <p>
+            <label for="{{form.username.id_for_label}}">Username</label>
+            <!--The ID that will be used for this field. If you are constructing the label manually, you may want to use this in lieu of label_tag. 
+            It’s also useful, for example, if you have some inline JavaScript and want to avoid hardcoding the field’s ID.-->
+            {{form.username}}
+        </p> 
+        <p>
+            <label for="{{form.password.id_for_label}}">Password</label>
+            {{form.password}}
+
+        </p>
+        <button type="submit" class="btn">Login</button>
+    </form>
+    <p style="margin-top: 1rem; font-size: 0.9rem;">
+        Don't have an account? <a href="{% url 'signup'%}">Signup</a>
+
+    </p>
+
+</div>
+
+
+{% endblock %}

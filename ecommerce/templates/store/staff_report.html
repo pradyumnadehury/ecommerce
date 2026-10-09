@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Staff Report{% endblock %}
+{% block content %}
+<h1>Staff Report -All orders</h1>
+<p>This page is only </p>
+ <table>
+    <thead>
+        <tr>
+            <th>Order #</th>
+            <th>Customer</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th>Place</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>#{{order.id}}</td>
+            <td>{{ order.customer.username}}</td>
+            <td><span>{{order.get_status_display}}</span></td>
+            <td>${{order.total}}</td>
+            <td>{{order.created_at|date:"M d,Y"}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+ </table>
+
+
+
+{% endblock %}

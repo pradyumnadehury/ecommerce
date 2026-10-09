@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{product.name}}{% endblock %}
+{% block content %}
+<div class="card">
+    {% if product.image %}
+        <img src="{{product.image.url}}" alt="{{product.name}}" style="max-width: 300px;border: 20px;">
+
+    {% endif %}
+    <h1>{{product.name}}</h1>
+    <p class="price">${{product.price}}</p>
+    <p>{{product.description|default:"No description available"}}</p>
+    <p><strong>category: </strong>{{product.category|default:"-"}}</p>
+    <!--If value is "" (the empty string), the output will be nothing.-->
+    {% if product.in_stock %}
+        <form action="{% url 'cart_add' product.id%}" style="max-width: 200px;" method="post">
+            {%csrf_token%}
+            <label for="qty">Quantity</label>
+            <input type="number" name="quantity" id="qty" value="1" min="1" max="{{product.stock}}">
+            <button type="submit" class="btn" style="margin-top: 0.7rem;">Add to Cart</button>
+        </form>
+    {% else %}
+       <p class="out-of-stock">out of stock</p>    
+    {% endif %}   
+
+</div>
+<a href="{% url 'product_list' %}" class="btn secondary">Back to shop</a>
+
+
+{% endblock %} 
+

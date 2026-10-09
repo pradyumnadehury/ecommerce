@@ -1,0 +1,28 @@
+{% extends 'base.html'%}
+{% block title %}Sign Up {% endblock %}
+{% block content %}
+<div class="auth-box card">
+    <h1>Create an account</h1>
+    <form action="" method="post">
+        {%csrf_token%}
+        {{form.non_field_errors}}
+        {% for field in form %}
+           <p>
+              <label for="{{field.id_for_label}}">{{field.label}}</label><!--The label of the field,-->
+              <!--     The ID that will be used for this field (id_contact_email in the example above). If you are constructing the label manually, you may want to use this in lieu of label_tag. It’s also useful, for example, if you have some inline JavaScript and want to avoid hardcoding the field’s I-->
+              {{field}}
+              {% if field.help_text %} <div class="helptext">{{field.help_text}}</div>{% endif %}
+              <!--Any help text that has been associated with the field.-->
+              {{field.errors}} <!--any validation errors corresponding to this field-->
+           </p>
+        {% endfor %}  
+        <button type="submit">Sign Up</button> 
+    </form>
+    <p style="margin-top:1rem;font-size: 0.9rem;">
+        Already have an account? <a href="{% url 'login'%}">Login</a>
+
+    </p>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,67 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Shop {% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    
+    
+</head>
+<body>
+    <header class="site-header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="{% url 'product_list'%}" class="nav-brand">ShopFront</a>
+                <div class="nav-link">
+                    <a href="{% url 'product_list' %}">Shop</a>
+                    <a href="{% url 'cart_detail' %}">Cart {%if nav_cart_count%} ({{nav_cart_count}})</a>{%endif%}
+                    {% if user.is_authenticated %} 
+                    <!--Read-only attribute which is always True (as opposed to AnonymousUser.is_authenticated which is always False). This-->
+                       <a href="{% url 'order_list' %}">My orders</a>
+                       {% if user.is_staff %}
+                       <!--Boolean. Allows this user to access the admin site.-->
+                           <a href="{% url 'staff_report'%}">Staff Report</a>
+                           <a href="{% url 'admin:index'%}">Admin</a>
+                       {% endif %}    
+                       <span class="nav-user">Hi, {{user.username}}</span>
+                       <form action="{% url 'logout'%}" method="post" class="inline-form">
+                         {%csrf_token%}
+                         <button type="submit" class="link-button">Logout</button>
+                       </form>
+                    {% else %}   
+                       <a href="{% url 'login' %}">login</a>
+                       <a href="{% url 'signup' %}">Sign Up</a>
+                    {%endif%}   
+
+                </div>
+            </div>
+        </nav>
+
+        
+    </header>
+    <main class="container">
+        <!--If you’re using the context processor, your template should be rendered with a RequestContext. 
+        Otherwise, ensure messages is available to the template context.-->
+        {% if  messages %}
+            <ul class="messages">
+              {% for message in messages %}
+                <li class="message: {{message.tags}}">{{message}}</li>
+              {% endfor %}  
+
+            </ul>
+        {% endif %}
+        {% block content %}{% endblock %}
+
+
+    </main>
+    <footer>
+
+
+    </footer>
+
+    
+</body>
+</html>
